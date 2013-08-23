@@ -1,0 +1,22 @@
+<VirtualHost *>
+    ServerAlias www.{$host} {$server_alias}
+    ServerAdmin {$server_admin}
+    ServerName {$host}
+
+    WSGIDaemonProcess app threads=5 python-path={$document_root}/app
+    WSGIScriptAlias / {$document_root}/app/config.wsgi
+
+    AliasMatch /static/(.*) {$document_root}/app/static/$1
+
+    <Directory {$document_root}/app>
+        WSGIProcessGroup app
+        WSGIApplicationGroup {$host}
+        Order deny,allow
+        Allow from all
+    </Directory>
+
+    <Directory {$document_root}/app/static>
+        Order deny,allow
+        Allow from all
+    </Directory>
+</VirtualHost>
